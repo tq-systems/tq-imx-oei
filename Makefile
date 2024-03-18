@@ -52,6 +52,7 @@ DEBUG ?= 0
 
 ifeq ($(DEBUG),1)
     FLAGS += -DDEBUG
+    FLAGS += -DDDR_MEM_TEST
 endif
 
 # Configure board
