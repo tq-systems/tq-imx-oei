@@ -168,6 +168,7 @@ help :
 	@/bin/echo -e "\tv=1                                 : verbose compile logs, default: off"
 	@/bin/echo -e "\tLTO=1                               : Enable Link Time opt, default: off"
 	@/bin/echo -e "\tDDR_CONFIG=file name (w/o .c)       : Override DDR cfg filename, default: off"
+	@/bin/echo -e "\tRAM_SIZE=[2,4]                      : select RAM size for tqma95xxsa, default: 2"
 
 
 include ./oei/makefiles/build_info.mak
