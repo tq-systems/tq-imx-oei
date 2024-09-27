@@ -128,7 +128,7 @@ int oei_main(uint32_t argc, uint32_t *argv)
         fail = fail + mem_test(DDR_MEM_BASE + SIZE_1G, 0xabcd0000, 10, 0x100);
         if (fail)
         {
-            printf("DDR OEI: memtest fails: %u\n", fail);
+            printf("DDR OEI: memtest fails: %d\n", fail);
         }
         else
         {
