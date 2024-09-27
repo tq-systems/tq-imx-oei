@@ -1,0 +1,32 @@
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "schedule" || $CI_PIPELINE_SOURCE == "web"
+
+image: "vgitlab01.tq-net.de:5005/tq-embedded/tqmaxx/toolchain-tqmaxx/bare:ubuntu-18.04"
+
+variables:
+  OEI_CROSS_COMPILE: "/opt/arm-gnu-toolchain-12.2.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-"
+  BUILDDIR: build
+
+stages:
+  - build
+
+compile:
+  tags:
+    - docker
+    - tqmaxx
+  stage: build
+  parallel:
+    matrix:
+      - MACHINE: [ mx95lp5 ]
+        CONFIG: ["d=1", "d=0"]
+  script:
+    - echo "Building ${MACHINE} with ${CONFIG}"
+    - make -j$(nproc) board=${MACHINE} oei=tcm ${CONFIG} all
+    - make -j$(nproc) board=${MACHINE} oei=ddr ${CONFIG} all
+  artifacts:
+    when: on_success
+    paths:
+      - "${BUILDDIR}/${MACHINE}/*/*.bin"
+      - "${BUILDDIR}/${MACHINE}/*/*.elf"
+      - "${BUILDDIR}/${MACHINE}/*/build_info.h"

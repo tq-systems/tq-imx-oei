@@ -52,6 +52,7 @@ DEBUG ?= 0
 
 ifeq ($(DEBUG),1)
     FLAGS += -DDEBUG
+    FLAGS += -DDDR_MEM_TEST
 endif
 
 # Configure board
@@ -71,6 +72,10 @@ LOWER_R := $(shell echo $(R) | tr A-Z a-z)
 UPPER_R := $(shell echo $(R) | tr a-z A-Z)
 REV = $(UPPER_R)
 FLAGS += -DSREV_$(UPPER_R)
+
+# default to unknown, can be set at board level
+TIMING_VERION ?= unknown
+FLAGS += -DTIMING_VERSION=$(TIMING_VERSION)
 
 # Configure oei
 ifdef oei

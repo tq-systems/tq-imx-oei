@@ -60,16 +60,14 @@ else
 	$(AT)-perl -pi -e 'chomp if eof' $@
 	$(AT)/bin/echo '' >> $@
 	$(AT)/bin/echo -n '#define OEI_BUILD ' >> $@
-	$(AT)-git rev-list --count --first-parent HEAD >> $@
-	$(AT)-perl -pi -e 'chomp if eof' $@
-	$(AT)/bin/echo 'UL' >> $@
+	$(AT)-$(ROOT_DIR)/scripts/mk-local-version.sh >> $@
 	$(AT)/bin/echo -n '#define OEI_COMMIT 0x' >> $@
 	$(AT)-git rev-parse --short=8 HEAD >> $@
 	$(AT)-perl -pi -e 'chomp if eof' $@
 	$(AT)/bin/echo 'UL' >> $@
 endif
-	$(AT)date +'#define OEI_DATE "%b %d %C%y"' >> $@
-	$(AT)date +'#define OEI_TIME "%T"' >> $@
+	$(AT)LANG=C date +'#define OEI_DATE "%b %d %C%y"' >> $@
+	$(AT)LANG=C date +'#define OEI_TIME "%T"' >> $@
 	$(AT)/bin/echo '' >> $@
 	$(AT)/bin/echo '#define OEI_MKIMAGE_BRANCH "$(MKIMAGE_BRANCH)"' >> $@
 	$(AT)/bin/echo '#define OEI_MKIMAGE_BUILD "$(MKIMAGE_BUILD)"' >> $@
@@ -95,7 +93,7 @@ rn_info.sed :
 	$(AT)-perl -pi -e 'chomp if eof' $@
 	$(AT)/bin/echo "/g' rn.md" >> $@
 	$(AT)/bin/echo -n "sed -i 's/\#OEI_DATE/" >> $@
-	$(AT)date +'%b %d %C%y' >> $@
+	$(AT)LANG=C date +'%b %d %C%y' >> $@
 	$(AT)-perl -pi -e 'chomp if eof' $@
 	$(AT)/bin/echo "/g' rn.md" >> $@
 	$(AT)/bin/echo "sed -i 's/\#MKIMAGE_BRANCH/$(MKIMAGE_BRANCH)/g' rn.md" >> $@
