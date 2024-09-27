@@ -96,8 +96,8 @@ int oei_main(uint32_t argc, uint32_t *argv)
     BOARD_InitPins();
     BOARD_InitDebugConsole();
 
-    printf("\nDDR OEI: (Build %lu, Commit %08lx, %s %s)\n\n",
-        OEI_BUILD, OEI_COMMIT, OEI_DATE, OEI_TIME);
+    printf("\nDDR OEI: (Build %s, Commit %08lx, %s %s)\n\n",
+        __stringify(OEI_BUILD), OEI_COMMIT, OEI_DATE, OEI_TIME);
 
     printf("DDR OEI: SOC %s, Board %s\n", OEI_DEVICES, OEI_BOARD);
     printf("CONFIG: %s **\n", __stringify(TIMING_VERSION));

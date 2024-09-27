@@ -60,9 +60,7 @@ else
 	$(AT)-perl -pi -e 'chomp if eof' $@
 	$(AT)/bin/echo '' >> $@
 	$(AT)/bin/echo -n '#define OEI_BUILD ' >> $@
-	$(AT)-git rev-list --count --first-parent HEAD >> $@
-	$(AT)-perl -pi -e 'chomp if eof' $@
-	$(AT)/bin/echo 'UL' >> $@
+	$(AT)-$(ROOT_DIR)/scripts/mk-local-version.sh >> $@
 	$(AT)/bin/echo -n '#define OEI_COMMIT 0x' >> $@
 	$(AT)-git rev-parse --short=8 HEAD >> $@
 	$(AT)-perl -pi -e 'chomp if eof' $@
