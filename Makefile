@@ -158,7 +158,9 @@ help :
 	@/bin/echo -e "\tclean          : remove all build files"
 	@/bin/echo -e "\treally-clean   : remove build directory\n"
 	@/bin/echo -e "\nOptions:"
-	@/bin/echo -e "\tboard=mx95lp5/mx95lp4x/mx95lp4x-15  : the board,            default: mx95lp5"
+	@/bin/echo -e "\tboard=<name>                        : the board,            default: mx95lp5"
+	@/bin/echo -e "\t\tmx95lp5/mx95lp4x/mx95lp4x-15 - NXP EVK"
+	@/bin/echo -e "\t\ttqma95xxsa - TQ-Systems GmbH SoM"
 	@/bin/echo -e "\toei=ddr/tcm                         : OEI type,             default: ddr"
 	@/bin/echo -e "\tr=A0/B0                             : SOC revision,         default: A0"
 	@/bin/echo -e "\tDEBUG=1 or d=1                      : enable debug output,  default: off"
@@ -166,6 +168,7 @@ help :
 	@/bin/echo -e "\tv=1                                 : verbose compile logs, default: off"
 	@/bin/echo -e "\tLTO=1                               : Enable Link Time opt, default: off"
 	@/bin/echo -e "\tDDR_CONFIG=file name (w/o .c)       : Override DDR cfg filename, default: off"
+	@/bin/echo -e "\tRAM_SIZE=[2,4]                      : select RAM size for tqma95xxsa, default: 2"
 
 
 include ./oei/makefiles/build_info.mak

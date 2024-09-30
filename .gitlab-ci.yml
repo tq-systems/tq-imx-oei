@@ -18,12 +18,13 @@ compile:
   stage: build
   parallel:
     matrix:
-      - MACHINE: [ mx95lp5 ]
-        CONFIG: ["d=1", "d=0"]
+      - MACHINE: [ "tqma95xxsa" ]
+        CONFIG: [ "d=1", "d=0" ]
+        RAM_SIZE: [ "2", "4" ]
   script:
     - echo "Building ${MACHINE} with ${CONFIG}"
-    - make -j$(nproc) board=${MACHINE} oei=tcm ${CONFIG} all
-    - make -j$(nproc) board=${MACHINE} oei=ddr ${CONFIG} all
+    - make -j$(nproc) board=${MACHINE} oei=tcm ${CONFIG} RAM_SIZE=${RAM_SIZE} all
+    - make -j$(nproc) board=${MACHINE} oei=ddr ${CONFIG} RAM_SIZE=${RAM_SIZE} all
   artifacts:
     when: on_success
     paths:
