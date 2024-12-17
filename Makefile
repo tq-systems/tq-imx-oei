@@ -55,6 +55,11 @@ ifeq ($(DEBUG),1)
     FLAGS += -DDDR_MEM_TEST
 endif
 
+ENABLE_SSC ?= 0
+ifeq ($(ENABLE_SSC),1)
+    FLAGS += -DENABLE_SSC
+endif
+
 # Configure board
 ifdef board
     SOM := $(board)

@@ -6,11 +6,8 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <errno.h>
-#if defined(LPDDR4x)
 #include "msb_ddr4x.h"
-#elif defined(LPDDR5)
 #include "msb_ddr5.h"
-#endif
 #include "fsl_sysctr.h"
 #include "soc_ddr.h"
 
@@ -47,68 +44,101 @@ static void ddrphy_prepare_mb(uint16_t *mb, struct dram_fsp_msg *fsp_msg)
 	}
 }
 
-static int ddrphy_qb_restore(uint16_t *mb, struct dram_fsp_msg *fsp_msg, ddrphy_qb_state *qb_state)
+static void ddrphy_qb_restore_lp4x(MSB_DDR4X_t *msb, ddrphy_qb_state *qb_state)
 {
-	uint32_t i;
-#if defined(LPDDR4x)
-	MSB_DDR4X_t *msb = (MSB_DDR4X_t *)(mb);
-#elif defined(LPDDR5)
-	MSB_DDR5_t *msb = (MSB_DDR5_t *)(mb);
-#endif
-	for (i = 0; i < DDRPHY_QB_MSB_SIZE; i++)
-		mb[i] = 0;
+    msb->SequenceCtrl = 0x01; /* SequenceCtrl = 0x1 (DevInit Only)*/
+    msb->Quickboot    = 0x01; /* Quickboot    = 0x1 */
 
-	ddrphy_prepare_mb(mb, fsp_msg);
+    msb->QBPllUPllProg0 = qb_state->QBPllUPllProg0;
+    msb->QBPllUPllProg1 = qb_state->QBPllUPllProg1;
+    msb->QBPllUPllProg2 = qb_state->QBPllUPllProg2;
+    msb->QBPllUPllProg3 = qb_state->QBPllUPllProg3;
+    msb->QBPllCtrl1 = qb_state->QBPllCtrl1;
+    msb->QBPllCtrl4 = qb_state->QBPllCtrl4;
+    msb->QBPllCtrl5 = qb_state->QBPllCtrl5;
 
-	msb->SequenceCtrl = 0x01; /* SequenceCtrl = 0x1 (DevInit Only)*/
-	msb->Quickboot    = 0x01; /* Quickboot    = 0x1 */
+    msb->MR12_A0 = qb_state->TrainedVREFCA_A0;
+    msb->MR12_A1 = qb_state->TrainedVREFCA_A1;
+    msb->MR12_B0 = qb_state->TrainedVREFCA_B0;
+    msb->MR12_B1 = qb_state->TrainedVREFCA_B1;
 
-	msb->QBPllUPllProg0 = qb_state->QBPllUPllProg0;
-	msb->QBPllUPllProg1 = qb_state->QBPllUPllProg1;
-	msb->QBPllUPllProg2 = qb_state->QBPllUPllProg2;
-	msb->QBPllUPllProg3 = qb_state->QBPllUPllProg3;
-	msb->QBPllCtrl1 = qb_state->QBPllCtrl1;
-	msb->QBPllCtrl4 = qb_state->QBPllCtrl4;
-	msb->QBPllCtrl5 = qb_state->QBPllCtrl5;
-
-#if (defined(LPDDR4x) || defined(LPDDR5))
-	msb->MR12_A0 = qb_state->TrainedVREFCA_A0;
-	msb->MR12_A1 = qb_state->TrainedVREFCA_A1;
-	msb->MR12_B0 = qb_state->TrainedVREFCA_B0;
-	msb->MR12_B1 = qb_state->TrainedVREFCA_B1;
-
-	msb->MR14_A0 = qb_state->TrainedVREFDQ_A0;
-	msb->MR14_A1 = qb_state->TrainedVREFDQ_A1;
-	msb->MR14_B0 = qb_state->TrainedVREFDQ_B0;
-	msb->MR14_B1 = qb_state->TrainedVREFDQ_B1;
-#endif
-
-#if (defined(LPDDR5))
-	msb->MR15_A0 = qb_state->TrainedVREFDQU_A0;
-	msb->MR15_A1 = qb_state->TrainedVREFDQU_A1;
-	msb->MR15_B0 = qb_state->TrainedVREFDQU_B0;
-	msb->MR15_B1 = qb_state->TrainedVREFDQU_B1;
-
-	msb->MR24_A0 = qb_state->TrainedDRAMDFE_A0;
-	msb->MR24_A1 = qb_state->TrainedDRAMDFE_A1;
-	msb->MR24_B0 = qb_state->TrainedDRAMDFE_B0;
-	msb->MR24_B1 = qb_state->TrainedDRAMDFE_B1;
-
-	msb->MR30_A0 = qb_state->TrainedDRAMDCA_A0;
-	msb->MR30_A1 = qb_state->TrainedDRAMDCA_A1;
-	msb->MR30_B0 = qb_state->TrainedDRAMDCA_B0;
-	msb->MR30_B1 = qb_state->TrainedDRAMDCA_B1;
-#endif
-	return 0;
+    msb->MR14_A0 = qb_state->TrainedVREFDQ_A0;
+    msb->MR14_A1 = qb_state->TrainedVREFDQ_A1;
+    msb->MR14_B0 = qb_state->TrainedVREFDQ_B0;
+    msb->MR14_B1 = qb_state->TrainedVREFDQ_B1;
 }
 
-#if (DDRPHY_QB_PST_SIZE > 0)
+static void ddrphy_qb_restore_lp5(MSB_DDR5_t *msb, ddrphy_qb_state *qb_state)
+{
+    msb->SequenceCtrl = 0x01; /* SequenceCtrl = 0x1 (DevInit Only)*/
+    msb->Quickboot    = 0x01; /* Quickboot    = 0x1 */
+
+    msb->QBPllUPllProg0 = qb_state->QBPllUPllProg0;
+    msb->QBPllUPllProg1 = qb_state->QBPllUPllProg1;
+    msb->QBPllUPllProg2 = qb_state->QBPllUPllProg2;
+    msb->QBPllUPllProg3 = qb_state->QBPllUPllProg3;
+    msb->QBPllCtrl1 = qb_state->QBPllCtrl1;
+    msb->QBPllCtrl4 = qb_state->QBPllCtrl4;
+    msb->QBPllCtrl5 = qb_state->QBPllCtrl5;
+
+    msb->MR12_A0 = qb_state->TrainedVREFCA_A0;
+    msb->MR12_A1 = qb_state->TrainedVREFCA_A1;
+    msb->MR12_B0 = qb_state->TrainedVREFCA_B0;
+    msb->MR12_B1 = qb_state->TrainedVREFCA_B1;
+
+    msb->MR14_A0 = qb_state->TrainedVREFDQ_A0;
+    msb->MR14_A1 = qb_state->TrainedVREFDQ_A1;
+    msb->MR14_B0 = qb_state->TrainedVREFDQ_B0;
+    msb->MR14_B1 = qb_state->TrainedVREFDQ_B1;
+
+    msb->MR15_A0 = qb_state->TrainedVREFDQU_A0;
+    msb->MR15_A1 = qb_state->TrainedVREFDQU_A1;
+    msb->MR15_B0 = qb_state->TrainedVREFDQU_B0;
+    msb->MR15_B1 = qb_state->TrainedVREFDQU_B1;
+
+    msb->MR24_A0 = qb_state->TrainedDRAMDFE_A0;
+    msb->MR24_A1 = qb_state->TrainedDRAMDFE_A1;
+    msb->MR24_B0 = qb_state->TrainedDRAMDFE_B0;
+    msb->MR24_B1 = qb_state->TrainedDRAMDFE_B1;
+
+    msb->MR30_A0 = qb_state->TrainedDRAMDCA_A0;
+    msb->MR30_A1 = qb_state->TrainedDRAMDCA_A1;
+    msb->MR30_B0 = qb_state->TrainedDRAMDCA_B0;
+    msb->MR30_B1 = qb_state->TrainedDRAMDCA_B1;
+}
+
+static int ddrphy_qb_restore(uint16_t *mb, struct dram_fsp_msg *fsp_msg, ddrphy_qb_state *qb_state)
+{
+    uint32_t i;
+    enum sdram_type type;
+
+    for (i = 0; i < DDRPHY_QB_MSB_SIZE; i++)
+        mb[i] = 0;
+
+    ddrphy_prepare_mb(mb, fsp_msg);
+
+    type = Ddrc_Get_Sdram_Type();
+
+    switch (type) {
+    case SDRAM_LPDDR4x:
+        ddrphy_qb_restore_lp4x((MSB_DDR4X_t *)(mb), qb_state);
+        break;
+    case SDRAM_LPDDR5:
+    default:
+        ddrphy_qb_restore_lp5((MSB_DDR5_t *)(mb), qb_state);
+        break;
+    }
+
+    return 0;
+}
+
+#if (DDRPHY_QB_PST_ARRAY_SIZE > 0)
 static void ddrphy_qb_pstate_sram_restore(ddrphy_qb_state *qb_state)
 {
 	int i;
 	uint32_t to_addr;
 
-	for (i = 0, to_addr = PSTATE_SRAM_BASE_ADDR; i < DDRPHY_QB_PST_SIZE; i++, to_addr++)
+	for (i = 0, to_addr = PSTATE_SRAM_BASE_ADDR; i < DDRPHY_QB_PST_ARRAY_SIZE; i++, to_addr++)
 		Dwc_Ddrphy_Apb_Wr(to_addr, qb_state->pst[i]);
 }
 #endif
@@ -195,13 +225,13 @@ int Ddr_Cfg_Phy_Qb(struct dram_timing_info *dtiming, int fsp_id)
 	printf("DDR OEI: ACSM SRAM restore in %u us\n", te);
 	ts = SYSCTR_GetUsec64();
 #endif
-#if (DDRPHY_QB_PST_SIZE > 0)
+#if (DDRPHY_QB_PST_ARRAY_SIZE > 0)
 	drphy_qb_pstate_sram_restore(qb_state);
 #ifdef DEBUG
 	te = SYSCTR_GetUsec64() - ts;
 	printf("DDR OEI: PSTATE SRAM restore in %u us\n", te);
 #endif /* DEBUG */
-#endif /* DDRPHY_QB_PST_SIZE > 0 */
+#endif /* DDRPHY_QB_PST_ARRAY_SIZE > 0 */
 	/** 3.2.8 Step I Configure PHY for Hardware */
 #if defined(PUB1_xx)
 	Dwc_Ddrphy_Apb_Wr(0xd00e7, 0x400);
