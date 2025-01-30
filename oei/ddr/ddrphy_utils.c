@@ -3,7 +3,10 @@
  * Copyright 2018, 2023-2024 NXP
  */
 
+#include <stdio.h>
 #include <stdbool.h>
+
+#include "oei.h"
 #include "clock.h"
 #include "ddr.h"
 
@@ -110,74 +113,32 @@ void Ddr_Phy_Init_Set_Dfi_Clk(unsigned int drate)
         Dram_PLL_Init(MHZ(600));
         Dram_Disable_Bypass();
         break;
-    case 4266: /* Assume 4266.(6) */
-        Dram_PLL_Init(533333333);
+    case 4266: /* Assume 4266 */
+        Dram_PLL_Init(533250000);
         Dram_Disable_Bypass();
         break;
     case 4000:
         Dram_PLL_Init(MHZ(500));
         Dram_Disable_Bypass();
         break;
-    case 3733: /* Assume 3733.(3) */
-        Dram_PLL_Init(466666667);
+    case 3733: /* Assume 3733 */
+        Dram_PLL_Init(466625000);
         Dram_Disable_Bypass();
         break;
     case 3200:
-        Dram_PLL_Init(MHZ(400));
+        Dram_PLL_Init(400000000);
         Dram_Disable_Bypass();
         break;
-    case 2133: /* Assume 2133.(3) */
-        Dram_PLL_Init(266666666);
-        Dram_Disable_Bypass();
-        break;
-    case 2400:
-        Dram_PLL_Init(MHZ(300));
-        Dram_Disable_Bypass();
-        break;
-    case 1866:
-        Dram_PLL_Init(MHZ(233));
+    case 1866: /* Assume 1866 */
+        Dram_PLL_Init(233250000);
         Dram_Disable_Bypass();
         break;
     case 1600:
-        Dram_PLL_Init(MHZ(200));
+        Dram_PLL_Init(200000000);
         Dram_Disable_Bypass();
-        break;
-    case 1200:
-        Dram_PLL_Init(MHZ(150));
-        Dram_Disable_Bypass();
-        break;
-    case 1066:
-        Dram_PLL_Init(MHZ(133));
-        Dram_Disable_Bypass();
-        break;
-    case 933:
-        Dram_PLL_Init(MHZ(116));
-        Dram_Disable_Bypass();
-        break;
-    case 800:
-        Dram_PLL_Init(MHZ(100));
-        Dram_Disable_Bypass();
-        break;
-    case 667:
-        Dram_PLL_Init(MHZ(83));
-        Dram_Disable_Bypass();
-        break;
-    case 625:
-        Dram_Enable_Bypass(MHZ(625));
-        break;
-    case 400:
-        Dram_Enable_Bypass(MHZ(400));
-        break;
-    case 333:
-        Dram_Enable_Bypass(MHZ(333));
-        break;
-    case 200:
-        Dram_Enable_Bypass(MHZ(200));
-        break;
-    case 100:
-        Dram_Enable_Bypass(MHZ(100));
         break;
     default:
+        printf("Clk rate not found\n");
         return;
     }
 }

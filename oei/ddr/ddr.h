@@ -23,6 +23,13 @@
 #define IMEM_OFFSET_ADDR 0x00050000
 #define DMEM_OFFSET_ADDR 0x00058000
 
+/* DDRC DDR_SDRAM_CFG[SDRAM_TYPE] */
+enum sdram_type
+{
+    SDRAM_LPDDR5  = 1, /* 001b - LPDDR5 SDRAM */
+    SDRAM_LPDDR4x = 4, /* 100b - LPDDR4x SDRAM */
+};
+
 struct ddr_fw_header
 {
     uint32_t imem_size;
@@ -130,6 +137,7 @@ struct dram_timing_info
 
 extern struct dram_timing_info dram_timing;
 
+enum sdram_type Ddrc_Get_Sdram_Type(void);
 int Ddrc_Init(struct dram_timing_info *timing_info, uint32_t img_id);
 int Ddr_Cfg_Phy(struct dram_timing_info *timing_info);
 
@@ -150,12 +158,8 @@ void Ddr_Phy_Trained_Csr_Save(void);
     *(uint32_t volatile *)(IP2APB_DDRPHY_IPS_BASE_ADDR(0) + Ddrphy_AddrRemap(addr))
 
 /* Quick Boot related */
-#if (!defined(LPDDR5) && !defined(LPDDR4x))
-#error "Please specify either -DLPDDR5 or -DLPDDR4x !"
-#endif
-
-#define DDRPHY_QB_CSR_SIZE    5168
-#define DDRPHY_QB_ACSM_SIZE    4 * 1024
+#define DDRPHY_QB_CSR_ARRAY_SIZE    5168
+#define DDRPHY_QB_ACSM_ARRAY_SIZE    4 * 1024
 #define DDRPHY_QB_MSB_SIZE    0x200
 
 /**
@@ -167,7 +171,7 @@ void Ddr_Phy_Trained_Csr_Save(void);
 #else
 #define DDRPHY_QB_PSTATES    0
 #endif
-#define DDRPHY_QB_PST_SIZE    DDRPHY_QB_PSTATES * 4 * 1024
+#define DDRPHY_QB_PST_ARRAY_SIZE    DDRPHY_QB_PSTATES * 4 * 1024
 
 #define ACSM_SRAM_BASE_ADDR    0x41000
 #define PSTATE_SRAM_BASE_ADDR    0xA0000
@@ -213,9 +217,9 @@ typedef struct
     uint16_t QBPllCtrl1;
     uint16_t QBPllCtrl4;
     uint16_t QBPllCtrl5;
-    uint16_t csr[DDRPHY_QB_CSR_SIZE];
-    uint16_t acsm[DDRPHY_QB_ACSM_SIZE];
-    uint16_t pst[DDRPHY_QB_PST_SIZE];
+    uint16_t csr[DDRPHY_QB_CSR_ARRAY_SIZE];
+    uint16_t acsm[DDRPHY_QB_ACSM_ARRAY_SIZE];
+    uint16_t pst[DDRPHY_QB_PST_ARRAY_SIZE];
 } ddrphy_qb_state;
 
 /**
