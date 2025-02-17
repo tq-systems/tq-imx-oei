@@ -12,7 +12,7 @@
 #include "config_board.h"
 
 /*!
- * @addtogroup BRD_OEI_MX95EVK
+ * @addtogroup BRD_OEI_TQMA95XXSA
  * @{
  *
  * @file
