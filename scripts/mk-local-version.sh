@@ -57,18 +57,27 @@ main () {
 	fi
 
 	if [ "${HAVE_GIT}" -ne "0" ]; then
+		local IS_GIT_TAG="0"
 		local GITHEAD=""
 		local GITATAG=""
+		local retval="0"
 
 		GITHEAD="$(git rev-parse --verify HEAD 2>/dev/null)"
-		GITATAG="$(git describe 2>/dev/null)"
-		local IS_GIT_TAG="0"
+		GITATAG="$(git describe 2>/dev/null)" || retval="${?}"
+		# Just in case command failure but output on stdout
+		if [ "${retval}" -ne "0" ]; then
+			GITATAG=""
+		fi
 
 		if git show-ref --quiet --tags "${GITATAG}" 2>/dev/null; then
 			IS_GIT_TAG="1"
 		fi
 		if [ "${IS_GIT_TAG}" -gt "0" ]; then
 			STAMP=${GITATAG};
+		#
+		# when we have no tag information there must be a
+		# valid commit information.
+		#
 		elif [ -n "${GITATAG}" ]; then
 			STAMP=$(echo "${GITATAG}" | \
 				awk -F- '{ printf("%s", $1); for (i = 2; i <= NF - 2; i++) { printf("-%s", $i) } }')
