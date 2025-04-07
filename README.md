@@ -14,25 +14,28 @@ Supported development environments include Ubuntu 2020.04, 2022.04, and 2024.04.
 
 ## Download from GitHub
 
-### NXP version
+### Prerequisites
 
-To download the repo from [GitHub](https://github.com/nxp-imx/imx-oei), first install git:
+To download the repo using git, you need to install git:
 
 ```
 sudo apt update
 sudo apt -y install git
 ```
 
-Then clone the repo:
+### NXP version
+
+NXP vendor version can be found at [GitHub](https://github.com/nxp-imx/imx-oei).
+Clone the repo:
 
 `git clone https://github.com/nxp-imx/imx-oei`
 
 ### TQ-Systems GmbH fork
 
-Based on [NXP version](#nxp_version). Add support for TQ-Systems GmbH SoM
+The fork is based on [NXP version](#nxp_version). This fork adds support for
+TQ-Systems GmbH SoM. To clone the repo from [GitHub](https://github.com/tq-systems/tq-imx-oei).
 
-Clone the repo from [GitHub](https://github.com/tq-systems/tq-imx-oei).
-
+`git clone https://github.com/tq-systems/tq-imx-oei`
 
 ## Installing the Toolchain
 
@@ -58,14 +61,23 @@ Also ensure the Linux installation is up-to-date and then install:
 
 ## Compiling an OEI Image
 
-To get started with the OEI on an NXP iMX95 EVK LP5 board, [download the repository](#download-from-github)
+The following TQ-Systems GmbH SOM are supported:
+
+| SOM        | OEI board name | DRAM size / GiB  |
+| ---------- | -------------- | ---------------- |
+| TQMa95xxLA | tqma95xxla     | 2, 4             |
+| TQMa95xxSA | tqma95xxsa     | 2, 4             |
+
+
+To get started with the OEI on an TQ-Systems board, [download the repository](#download-from-github)
 and then compile the OEI for the target configuration.
 
-For example to build OEI for TQMa95xxSA with 2GiB DDR, in the top directory of the code base (e.g. `tq-imx-oei`):
-
 ```
-make board=tqma95xxsa oei=ddr DEBUG=1 RAM_SIZE=4 all
-make board=tqma95xxsa oei=tcm DEBUG=1 RAM_SIZE=4 all
+BOARD=<OEI board name>
+DRAM_SIZE=<DRAM size>
+
+make board=${BOARD} oei=ddr DEBUG=1 RAM_SIZE=${DRAM_SIZE} all
+make board=${BOARD} oei=tcm DEBUG=1 RAM_SIZE=${DRAM_SIZE} all
 ```
 
 Build artifacts:
@@ -83,8 +95,7 @@ Copy the resulting binary image files to the iMX95 directory of the
 [mkimage tool](https://github.com/nxp-imx/imx-mkimage).
 
 Build a boot container using mkimage, program it to the boot device, and boot the board.
-The OEI will display debug messages on the M33 debug UART of TQMa95xxSA if compiled
+The OEI will display debug messages on the M33 debug UART of the SOM if compiled
 with `DEBUG=1`. For production builds, debug output shall be disabled.
 
 Usually the board configuration for TQ-Systems SoM are validated and can be used as is.
-
