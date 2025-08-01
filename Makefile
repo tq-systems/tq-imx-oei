@@ -55,11 +55,6 @@ ifeq ($(DEBUG),1)
     FLAGS += -DDDR_MEM_TEST
 endif
 
-ENABLE_SSC ?= 0
-ifeq ($(ENABLE_SSC),1)
-    FLAGS += -DENABLE_SSC
-endif
-
 # Configure board
 ifdef board
     SOM := $(board)
@@ -165,6 +160,7 @@ help :
 	@/bin/echo -e "\nOptions:"
 	@/bin/echo -e "\tboard=<name>                        : the board,            default: mx95lp5"
 	@/bin/echo -e "\t\tmx95lp5/mx95lp4x/mx95lp4x-15 - NXP EVK"
+	@/bin/echo -e "\t\tmx943lp5-19/mx943lp4-19 - NXP EVK"
 	@/bin/echo -e "\t\ttqma95xxsa - TQ-Systems GmbH SoM"
 	@/bin/echo -e "\toei=ddr/tcm                         : OEI type,             default: ddr"
 	@/bin/echo -e "\tr=A0/B0                             : SOC revision,         default: A0"

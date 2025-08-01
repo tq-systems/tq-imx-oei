@@ -91,6 +91,10 @@ uint32_t Get_Training_Data_Offset(uint32_t *offset)
     return ret;
 }
 
+void Ddr_Post_Init(void)
+{
+}
+
 #if defined(CONFIG_ELE)
 bool Ddr_Training_Data_Sign(void)
 {
@@ -109,11 +113,27 @@ bool Ddr_Training_Data_Sign(void)
 bool Ddr_Training_Data_Check(void)
 {
     ddrphy_qb_state *qb_state;
-    uint32_t size;
+    uint32_t i, sum, size;
     int ret;
 
     qb_state = (ddrphy_qb_state *)(QB_STATE_LOAD_ADDR);
     size = sizeof(ddrphy_qb_state) - MAC_LENGTH * sizeof(uint32_t);
+
+    /**
+     * Check if signature is empty
+     */
+    for (sum = 0, i = 0; i < MAC_LENGTH; i++)
+    {
+        sum |= qb_state->mac[i];
+    }
+
+    /**
+     * For empty signature there is no need to send ELE request to check it
+     */
+    if (sum == 0)
+    {
+        return false;
+    }
 
     ret = ELE_VerifyData(&qb_state->TrainedVREFCA_A0, size, &qb_state->mac, 0U);
 
@@ -143,8 +163,8 @@ bool Ddr_Training_Data_Sign(void)
        uint32_t size;
 
        qb_state = (ddrphy_qb_state *)(QB_STATE_SAVE_ADDR);
-       size = sizeof(ddrphy_qb_state) - sizeof(uint32_t);
-       qb_state->crc = CRC_Crc32(&qb_state->TrainedVREFCA_A0, size);
+       size = sizeof(ddrphy_qb_state) - MAC_LENGTH * sizeof(uint32_t);
+       qb_state->mac[0] = CRC_Crc32(&qb_state->TrainedVREFCA_A0, size);
 
        return true;
 }
@@ -156,10 +176,10 @@ bool Ddr_Training_Data_Check(void)
 
     qb_state = (ddrphy_qb_state *)(QB_STATE_LOAD_ADDR);
 
-    size = sizeof(ddrphy_qb_state) - sizeof(uint32_t);
+    size = sizeof(ddrphy_qb_state) - MAC_LENGTH * sizeof(uint32_t);
     crc = CRC_Crc32(&qb_state->TrainedVREFCA_A0, size);
 
-    return (crc == qb_state->crc);
+    return (crc == qb_state->mac[0]);
 }
 
 bool Ddr_Training_Data_Release(uint32_t img_id)
@@ -172,6 +192,6 @@ void Ddr_Training_Data_Invalidate(void)
     ddrphy_qb_state *qb_state;
 
     qb_state = (ddrphy_qb_state *)(QB_STATE_SAVE_ADDR);
-    qb_state->crc = 0U;
+    qb_state->mac[0] = 0U;
 }
 #endif

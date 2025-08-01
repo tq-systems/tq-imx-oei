@@ -89,6 +89,7 @@ struct dram_fsp_cfg
 struct dram_fsp_msg
 {
     unsigned int drate;
+    bool ssc;
     enum fw_type fw_type;
     /* pstate ddrphy config */
     struct ddrphy_cfg_param *fsp_phy_cfg;
@@ -143,7 +144,7 @@ int Ddr_Cfg_Phy(struct dram_timing_info *timing_info);
 
 /* utils function for ddr phy training */
 int Wait_Ddr_Phy_Training_Complete(void);
-void Ddr_Phy_Init_Set_Dfi_Clk(unsigned int drate);
+void Ddr_Phy_Init_Set_Dfi_Clk(unsigned int drate, bool ssc);
 void Ddr_Phy_Init_Read_Msg_Block(void);
 void Ddr_Phy_Cfg_Set(struct ddrphy_cfg_param *cfg, unsigned int num);
 void Ddr_Cfg_Save(struct dram_timing_info *dtiming);
@@ -184,12 +185,8 @@ enum ddrfw_type
 
 typedef struct
 {
-#if defined(CONFIG_ELE)
 #define MAC_LENGTH             8 /** 256 bits, 32-bit aligned */
-    uint32_t mac[MAC_LENGTH];
-#else
-    uint32_t crc;
-#endif
+    uint32_t mac[MAC_LENGTH];    /** For 95A0/1 keep CRC32 value in mac[0] */
     uint8_t TrainedVREFCA_A0;
     uint8_t TrainedVREFCA_A1;
     uint8_t TrainedVREFCA_B0;
@@ -286,5 +283,10 @@ bool Ddr_Training_Data_Release(uint32_t img_id);
  * Invalidate valid training data once quick boot flow completed
  */
 void Ddr_Training_Data_Invalidate(void);
+
+/**
+ * Call implements the SoC specific DDR post init sequence
+ */
+void Ddr_Post_Init(void);
 
 #endif
