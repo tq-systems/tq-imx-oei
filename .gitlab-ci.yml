@@ -2,10 +2,10 @@ workflow:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "schedule" || $CI_PIPELINE_SOURCE == "web"
 
-image: "vgitlab01.tq-net.de:5005/tq-embedded/tqmaxx/toolchain-tqmaxx/bare:ubuntu-18.04"
+image: "vgitlab01.tq-net.de:5005/tq-embedded/tqmaxx/toolchain-tqmaxx/bare:ubuntu-22.04"
 
 variables:
-  OEI_CROSS_COMPILE: "/opt/arm-gnu-toolchain-12.2.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-"
+  OEI_CROSS_COMPILE: "/opt/arm-gnu-toolchain-13.2.Rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-"
   BUILDDIR: build
 
 stages:
