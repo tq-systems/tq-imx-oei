@@ -72,6 +72,7 @@ LOWER_R := $(shell echo $(R) | tr A-Z a-z)
 UPPER_R := $(shell echo $(R) | tr a-z A-Z)
 REV = $(UPPER_R)
 FLAGS += -DSREV_$(UPPER_R)
+FLAGS += -DDDR_CONFIG=$(DDR_CONFIG)
 
 # default to unknown, can be set at board level
 TIMING_VERION ?= unknown
