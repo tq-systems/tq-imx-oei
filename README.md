@@ -68,16 +68,18 @@ The following TQ-Systems GmbH SOM are supported:
 | TQMa95xxLA | tqma95xxla     | 2, 4             |
 | TQMa95xxSA | tqma95xxsa     | 2, 4             |
 
+For names of supported DDR configs see the `ddr` subdirectory of each module.
 
 To get started with the OEI on an TQ-Systems board, [download the repository](#download-from-github)
 and then compile the OEI for the target configuration.
 
 ```
 BOARD=<OEI board name>
-DRAM_SIZE=<DRAM size>
+DDR_CONFIG=<DDR config>
+REV=<die revision>
 
-make board=${BOARD} oei=ddr DEBUG=1 RAM_SIZE=${DRAM_SIZE} all
-make board=${BOARD} oei=tcm DEBUG=1 RAM_SIZE=${DRAM_SIZE} all
+make board=${BOARD} oei=ddr r=${REV} DEBUG=1 DDR_CONFIG=${DDR_CONFIG} all
+make board=${BOARD} oei=tcm r=${REV} DEBUG=1 DDR_CONFIG=${DDR_CONFIG} all
 ```
 
 Build artifacts:
