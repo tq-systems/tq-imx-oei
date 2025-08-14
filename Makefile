@@ -74,10 +74,6 @@ REV = $(UPPER_R)
 FLAGS += -DSREV_$(UPPER_R)
 FLAGS += -DDDR_CONFIG=$(DDR_CONFIG)
 
-# default to unknown, can be set at board level
-TIMING_VERION ?= unknown
-FLAGS += -DTIMING_VERSION=$(TIMING_VERSION)
-
 # Configure oei
 ifdef oei
     OEI := $(oei)
