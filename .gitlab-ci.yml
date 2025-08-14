@@ -20,11 +20,12 @@ compile:
     matrix:
       - MACHINE: [ "tqma95xxsa", "tqma95xxla" ]
         CONFIG: [ "d=1", "d=0" ]
-        RAM_SIZE: [ "2", "4" ]
+        REV: [ "A0", "B0" ]
+        DDR_CONFIG: [ "TQMa95xxSA.DDR-Timing.2GB.V25.06.0006", "TQMa95xxSA.DDR-Timing.4GB.V25.06.0006" ]
   script:
     - echo "Building ${MACHINE} with ${CONFIG}"
-    - make -j$(nproc) board=${MACHINE} oei=tcm ${CONFIG} RAM_SIZE=${RAM_SIZE} all
-    - make -j$(nproc) board=${MACHINE} oei=ddr ${CONFIG} RAM_SIZE=${RAM_SIZE} all
+    - make -j$(nproc) board=${MACHINE} oei=tcm r=${REV} ${CONFIG} DDR_CONFIG=${DDR_CONFIG} all
+    - make -j$(nproc) board=${MACHINE} oei=ddr r=${REV} ${CONFIG} DDR_CONFIG=${DDR_CONFIG} all
   artifacts:
     when: on_success
     paths:
