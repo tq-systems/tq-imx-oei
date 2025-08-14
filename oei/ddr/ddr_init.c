@@ -158,7 +158,6 @@ int Ddrc_Init(struct dram_timing_info *dtiming, uint32_t img_id)
     uint32_t fsp_id, drate;
 #if (!defined(DDR_NO_PHY))
     uint32_t acg;
-    bool valid;
 #endif
 
     /* reset ddrphy */
@@ -173,15 +172,11 @@ int Ddrc_Init(struct dram_timing_info *dtiming, uint32_t img_id)
     fsp_id = dtiming->fsp_msg_num - 1;
     drate = dtiming->fsp_msg[fsp_id].drate;
     /* default to the last frequency point clock */
-    Ddr_Phy_Init_Set_Dfi_Clk(drate);
+    Ddr_Phy_Init_Set_Dfi_Clk(drate, dtiming->fsp_msg[fsp_id].ssc);
 
 #if (!defined(DDR_NO_PHY))
     /** Verify training data loaded from non-volatile memory */
-    valid = Ddr_Training_Data_Check();
-    /** Release in read-write mode the memory used to load training data */
-    Ddr_Training_Data_Release(img_id);
-
-    if (valid)
+    if (Ddr_Training_Data_Check(img_id))
     {
         /* Configure PHY in QuickBoot mode */
         ret = Ddr_Cfg_Phy_Qb(dtiming, fsp_id);
@@ -200,13 +195,7 @@ int Ddrc_Init(struct dram_timing_info *dtiming, uint32_t img_id)
         Ddr_Phy_Qb_Save();
 
         /** Sign collected training data */
-        Ddr_Training_Data_Sign();
-
-        /**
-         * Release in read-write mode the memory used
-         * to save and sign training data
-         */
-        Ddr_Training_Data_Release(img_id);
+        Ddr_Training_Data_Sign(img_id);
     }
 
     /* save the ddr info for retention */
@@ -244,6 +233,8 @@ int Ddrc_Init(struct dram_timing_info *dtiming, uint32_t img_id)
     /** Set SR_FAST_WK_EN in REG_DDR_SDRAM_CFG_3 */
     DDRC->DDR_SDRAM_CFG_3 |= DDRC_DDR_SDRAM_CFG_3_SR_FAST_WK_EN_MASK;
 #endif
+
+    Ddr_Post_Init();
 
     return ret;
 }

@@ -17,7 +17,7 @@
 
 #ifdef  DDR_MEM_TEST
 #define DDR_MEM_BASE    0x80000000
-#define SIZE_1G        0x40000000
+#define SIZE_512M       0x20000000
 static uint32_t mem_test(uint32_t addr, uint32_t val, uint32_t index, uint32_t len)
 {
     uint32_t read_data, fail = 0, i, j;
@@ -93,8 +93,10 @@ int oei_main(uint32_t argc, uint32_t *argv)
         timer_enable();
 
     Clock_Init();
+#ifdef DEBUG
     BOARD_InitPins();
     BOARD_InitDebugConsole();
+#endif
 
     printf("\nDDR OEI: (Build %s, Commit %08lx, %s %s)\n\n",
         __stringify(OEI_BUILD), OEI_COMMIT, OEI_DATE, OEI_TIME);
@@ -125,8 +127,8 @@ int oei_main(uint32_t argc, uint32_t *argv)
         fail = fail + mem_test(DDR_MEM_BASE, 0xfabeface, 0, 10);
         fail = fail + mem_test(DDR_MEM_BASE, 0xdeadbeef, 10, 0x100);
 
-        fail = fail + mem_test(DDR_MEM_BASE + SIZE_1G, 0x98760000, 0, 10);
-        fail = fail + mem_test(DDR_MEM_BASE + SIZE_1G, 0xabcd0000, 10, 0x100);
+        fail = fail + mem_test(DDR_MEM_BASE + SIZE_512M, 0x98760000, 0, 10);
+        fail = fail + mem_test(DDR_MEM_BASE + SIZE_512M, 0xabcd0000, 10, 0x100);
         if (fail)
         {
             printf("DDR OEI: memtest fails: %d\n", fail);
