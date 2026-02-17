@@ -3,6 +3,12 @@ include $(ROOT_DIR)/boards/$(SOM)/ddr/Makefile
 
 ifeq ($(TEST),1)
     FLAGS += -DDDR_MEM_TEST
+    OBJS  += $(OUT)/memtest.o
+endif
+
+ifeq ($(IEE),1)
+    FLAGS += -DDDR_IEE
+    OBJS  += $(OUT)/iee.o
 endif
 
 OBJS += \

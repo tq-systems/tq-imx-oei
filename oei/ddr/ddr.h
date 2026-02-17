@@ -1,10 +1,10 @@
 /* SPDX-License-Identifier: BSD-3-Clause */
 /*
- * Copyright 2022-2024 NXP
+ * Copyright 2022-2025 NXP
  */
 
-#ifndef __DDR_H
-#define __DDR_H
+#ifndef DDR_H
+#define DDR_H
 #include <stdbool.h>
 #include <stdint.h>
 
