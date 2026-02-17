@@ -20,7 +20,7 @@ compile:
     matrix:
       - MACHINE: [ "tqma95xxsa", "tqma95xxla" ]
         CONFIG: [ "d=1 t=1", "d=0" ]
-        REV: [ "A0", "B0" ]
+        REV: [ "B0" ]
         DDR_CONFIG: [ "TQMa95xxSA.DDR-Timing.2GB.V25.06.0006", "TQMa95xxSA.DDR-Timing.4GB.V25.06.0006" ]
   script:
     - echo "Building ${MACHINE} with ${CONFIG}"
