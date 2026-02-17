@@ -52,7 +52,6 @@ DEBUG ?= 0
 
 ifeq ($(DEBUG),1)
     FLAGS += -DDEBUG
-    FLAGS += -DDDR_MEM_TEST
 endif
 
 # Configure board
@@ -91,6 +90,7 @@ IEE ?= 0
 # Enable OEI specific self-test
 ifdef t
     TEST := $(t)
+    FLAGS += -DDEBUG
 endif
 TEST ?= 0
 
