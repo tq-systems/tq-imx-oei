@@ -12,6 +12,14 @@ Releases are named with the following scheme:
 
 ## [Unreleased]
 
+## Next Version
+
+### Changed
+
+* integrate NXP changes from lf-6.12.49-2.2.0
+* adjust CI, do not build for CPU stepping A0
+* integrate NXP changes from lf-6.12.34-2.1.0
+
 ## Initial Version
 
 TQ-Systems internal development based on NXP version lf-6.12.20-2.0.0
