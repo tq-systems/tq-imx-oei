@@ -1,10 +1,10 @@
 /* SPDX-License-Identifier: BSD-3-Clause */
 /*
- * Copyright 2022-2024 NXP
+ * Copyright 2022-2025 NXP
  */
 
-#ifndef __CLOCK_IMX9__
-#define __CLOCK_IMX9__
+#ifndef CLOCK_H
+#define CLOCK_H
 
 #include <stdbool.h>
 #include <stdint.h>

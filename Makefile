@@ -81,6 +81,13 @@ endif
 # Default to ddr
 OEI ?= ddr
 
+# Configure iee
+ifdef iee
+    IEE := $(iee)
+endif
+# Default to 0
+IEE ?= 0
+
 # Enable OEI specific self-test
 ifdef t
     TEST := $(t)
@@ -162,6 +169,7 @@ help :
 	@/bin/echo -e "\tr=A0/B0                             		: SOC revision,         default: A0"
 	@/bin/echo -e "\tDEBUG=1 or d=1                      		: enable debug output,  default: off"
 	@/bin/echo -e "\tt=1                                 		: enable OEI self-test, default: off"
+	@/bin/echo -e "\tiee=1                               		: Enable IEE,           default: off"
 	@/bin/echo -e "\tv=1                                 		: verbose compile logs, default: off"
 	@/bin/echo -e "\tLTO=1                               		: Enable Link Time opt, default: off"
 	@/bin/echo -e "\tDDR_CONFIG=file name (w/o .c)       		: Override DDR cfg filename, default: off"
