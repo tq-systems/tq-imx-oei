@@ -7,7 +7,6 @@ cpu     := m33
 SOC     := MIMX95
 SOCFULL := $(SOC)
 SOC_DEVICE_DIR := devices/$(SOC)
-RAM_SIZE ?= 2
 
 ifneq ($(REV),A0)
 FLAGS += -DCONFIG_DUMMY_TRAIN_DATA_SUPPORT -DCONFIG_ELE
