@@ -14,6 +14,10 @@ Releases are named with the following scheme:
 
 ## Next Version
 
+### Added
+
+* initial Support for TQMa94xxLA with 2 GB RAM
+
 ### Changed
 
 * integrate NXP changes from lf-6.12.49-2.2.0
