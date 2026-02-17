@@ -65,6 +65,7 @@ The following TQ-Systems GmbH SOM are supported:
 
 | SOM        | OEI board name | DRAM size / GiB  |
 | ---------- | -------------- | ---------------- |
+| TQMa94xxLA | tqma94xxla     | 2                |
 | TQMa95xxLA | tqma95xxla     | 2, 4             |
 | TQMa95xxSA | tqma95xxsa     | 2, 4             |
 

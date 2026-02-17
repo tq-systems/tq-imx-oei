@@ -168,6 +168,7 @@ help :
 	@/bin/echo -e "\tboard=mx95lp5/mx95lp4x/mx95lp4x-15  		: the board,            default: mx95lp5"
 	@/bin/echo -e "\tboard=mx943lp5-19/mx943lp4-19/mx943lp4-15	: the board,            "
 	@/bin/echo -e "\tboard=tqma95xxsa/tqma95xxla			: the board,		"
+	@/bin/echo -e "\tboard=tqma94xxla				: the board,		"
 	@/bin/echo -e "\toei=ddr/tcm                         		: OEI type,             default: ddr"
 	@/bin/echo -e "\tr=A0/B0                             		: SOC revision,         default: A0"
 	@/bin/echo -e "\tDEBUG=1 or d=1                      		: enable debug output,  default: off"
