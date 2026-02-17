@@ -55,8 +55,9 @@ CC = $(OEI_CROSS_COMPILE)$(cc)
 LD = $(OEI_CROSS_COMPILE)$(cc)
 OBJCOPY = $(OEI_CROSS_COMPILE)objcopy
 OBJDUMP = $(OEI_CROSS_COMPILE)objdump
-SIZE = $(OEI_CROSS_COMPILE)size
-FLAGS += -DCPU_$(SOCFULL)_c$(cpu) -D$(SOC)
+READELF = $(OEI_CROSS_COMPILE)readelf
+SIZE    = $(OEI_CROSS_COMPILE)size
+FLAGS  += -DCPU_$(SOCFULL)_c$(cpu) -D$(SOC)
 
 # Configure linker control file
 LCF = $(SOC)_c$(cpu)
