@@ -5,7 +5,6 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#include "clock.h"
 #include "oei.h"
 #include "board.h"
 #include "rom_api.h"
@@ -66,15 +65,19 @@ int oei_main(uint32_t argc, uint32_t *argv)
 {
     int ret = 0;
     uint32_t offset = 0, id = 0;
+#if !defined(DEBUG)
+    uint32_t ts, te, *tdiff;
+#endif
 
     if (!timer_is_enabled())
         timer_enable();
 
-    Clock_Init();
-#ifdef DEBUG
-    BOARD_InitPins();
-    BOARD_InitDebugConsole();
+#if !defined(DEBUG)
+    ts = SYSCTR_GetUsec64();
 #endif
+
+    /* Board specific hardware initialization */
+    BOARD_InitHardware();
 
 #ifdef DDR_IEE
     prepare_iee();
@@ -116,6 +119,13 @@ int oei_main(uint32_t argc, uint32_t *argv)
     }
 #endif
     printf("DDR OEI: done, err = %d\n", ret);
+
+#if !defined(DEBUG)
+    te = SYSCTR_GetUsec64();
+
+    tdiff = (uint32_t *) (QB_STATE_SAVE_ADDR - sizeof(*tdiff));
+    (*tdiff) = te - ts;
+#endif
 
     return ret;
 }

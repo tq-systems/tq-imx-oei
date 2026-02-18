@@ -104,9 +104,33 @@ void Ddr_Post_Init(void)
 #if defined(CONFIG_ELE)
 bool Ddr_Training_Data_Sign(uint32_t img_id)
 {
+    ele_info_t info;
     ddrphy_qb_state *qb_state;
     uint32_t size;
     int ret;
+
+    ret = ELE_GetInfo(&info);
+    if (ret != ELE_SUCCESS_IND)
+    {
+        return false;
+    }
+
+    /**
+     * Local keys may not be available in some lifecycles
+     * Avoid signing training data for lifecycles below
+     */
+    switch (info.lifecycle)
+    {
+        case ELE_BLANK_LC:
+        case ELE_FAB_DEFAULT_LC:
+        case ELE_FAB_LC:
+        case ELE_NXP_PROVISIONED_LC:
+        case ELE_OEM_FIELD_RETURN_LC:
+        case ELE_NXP_FIELD_RETURN_LC:
+            return false;
+        default:
+            break;
+    }
 
     qb_state = (ddrphy_qb_state *)(QB_STATE_SAVE_ADDR);
     size = sizeof(ddrphy_qb_state) - MAC_LENGTH * sizeof(uint32_t);
@@ -125,11 +149,10 @@ bool Ddr_Training_Data_Sign(uint32_t img_id)
     return (ret == ELE_SUCCESS_IND);
 }
 
-bool Ddr_Training_Data_Check(uint32_t img_id)
+bool Ddr_Training_Data_Check_Init(void)
 {
     ddrphy_qb_state *qb_state;
     uint32_t i, sum, size;
-    int ret;
 
     qb_state = (ddrphy_qb_state *)(QB_STATE_LOAD_ADDR);
     size = sizeof(ddrphy_qb_state) - MAC_LENGTH * sizeof(uint32_t);
@@ -150,7 +173,16 @@ bool Ddr_Training_Data_Check(uint32_t img_id)
         return false;
     }
 
-    ret = ELE_VerifyData(&qb_state->TrainedVREFCA_A0, size, &qb_state->mac, 0U);
+    ELE_VerifyData_Tx(&qb_state->TrainedVREFCA_A0, size, &qb_state->mac);
+
+    return true;
+}
+
+bool Ddr_Training_Data_Check(uint32_t img_id)
+{
+    int ret;
+
+    ret = ELE_VerifyData_Rx(0U);
 
     /**
      * Release in read-write mode the memory used to load training
@@ -179,6 +211,11 @@ bool Ddr_Training_Data_Sign(uint32_t img_id)
        qb_state->mac[0] = CRC_Crc32(&qb_state->TrainedVREFCA_A0, size);
 
        return true;
+}
+
+bool Ddr_Training_Data_Check_Init(void)
+{
+    return true;
 }
 
 bool Ddr_Training_Data_Check(uint32_t img_id)

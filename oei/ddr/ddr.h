@@ -242,7 +242,7 @@ struct ddr_phy_ops
 
 extern struct ddr_phy_ops phy_ops;
 
-int Ddr_Cfg_Phy_Qb(struct dram_timing_info *timing_info, int fsp_id);
+int Ddr_Cfg_Phy_Qb(struct dram_timing_info *timing_info, uint32_t fsp_id, uint32_t img_id);
 void Ddr_Phy_Qb_Save(void);
 
 /**
@@ -261,6 +261,13 @@ uint32_t Get_Training_Data_Offset(uint32_t *offset);
  * @return    true if training data sign succeeded, false otherwise
  */
 bool Ddr_Training_Data_Sign(uint32_t img_id);
+
+/**
+ * Triggers in non-blocking mode the training data check process
+ *
+ * @return    true if check is triggered properly, false otherwise
+ */
+bool Ddr_Training_Data_Check_Init(void);
 
 /**
  * Checks if loaded training data is valid and can be used

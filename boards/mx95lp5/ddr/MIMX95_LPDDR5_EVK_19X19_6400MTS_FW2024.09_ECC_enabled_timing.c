@@ -3,8 +3,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  *
- * Code generated with DDR Tool v3.8.0_0.7-be4c44bf4.
- * DDR PHY FW2024.09
+ * Code generated with DDR Tool v3.9.0_0.8-eff28b90a.
+ * DDR PHY FW2024.09-SP2
  * Chip revision: B0
  * Part number: NXP LPDDR5 EVK 19x19 board's default DDR part
  */
@@ -10625,7 +10625,7 @@ static struct ddrphy_cfg_param ddr_phy_pie[] = {
 
 static struct dram_fsp_msg ddr_dram_fsp_msg[] = {
     {
-        /* P0 6400mbps */
+        /* P0 6400mts */
         .drate = 6400,
         .ssc = false,
         .fsp_phy_cfg = ddr_phy_fsp0_cfg,
