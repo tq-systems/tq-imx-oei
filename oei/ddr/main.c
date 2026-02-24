@@ -88,6 +88,7 @@ int oei_main(uint32_t argc, uint32_t *argv)
 
     printf("DDR OEI: SOC %s, Board %s\n", OEI_DEVICES, OEI_BOARD);
     printf("DDR_CONFIG: %s **\n", __stringify(DDR_CONFIG));
+    printf("running on LPUART%d:\n", BOARD_DEBUG_UART_INSTANCE);
     /**
      * Pass offset = 0 for iMX95 A0 since there is no ROM support
      * for training data dummy entry
