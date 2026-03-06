@@ -60,7 +60,10 @@ void BOARD_InitDebugConsole(void)
 {
     if (s_uartConfig.base != NULL)
     {
-    /* TODO: copy and paste from NXP, why do we here assume a fixed value? */
+    /* TODO:
+     * copy and paste from NXP, Clock_Init() sets parent for
+     * debug UART clock to CLOCK_SRC_OSC24M with divider 1
+     */
 #if 0
         uint64_t rate = CCM_RootGetRate(s_uartConfig.clockId);
 #else
