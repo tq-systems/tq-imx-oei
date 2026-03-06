@@ -20,10 +20,10 @@ void BOARD_InitPins(void)
     IOMUXC_SetPinMux(IOMUXC_PAD_UART1_RXD__LPUART1_RX, 0U);
     IOMUXC_SetPinConfig(IOMUXC_PAD_UART1_RXD__LPUART1_RX, IOMUXC_PAD_PD(1U));
 
-    IOMUXC_SetPinMux(IOMUXC_PAD_UART1_TXD__LPUART1_TX, 0);
+    IOMUXC_SetPinMux(IOMUXC_PAD_UART1_TXD__LPUART1_TX, 0U);
     IOMUXC_SetPinConfig(IOMUXC_PAD_UART1_TXD__LPUART1_TX, IOMUXC_PAD_DSE(0xFU));
-#elif (BOARD_DEBUG_UART_INSTANCE == 2U)
-    /* LPUART 2 not supported */
+#else
+    /* BOARD_DEBUG_UART_INSTANCE configuration is not supported for this board */
     #error
 #endif
 }
