@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: BSD-3-Clause
 /*
  * Copyright 2023-2024 NXP
- * Copyright (c) 2024-2026 TQ-Systems GmbH <oss@tq-group.com>, D-82229 Seefeld, Germany.
+ * Copyright (c) 2026 TQ-Systems GmbH <oss@tq-group.com>, D-82229 Seefeld, Germany.
  */
 
 #include "clock.h"

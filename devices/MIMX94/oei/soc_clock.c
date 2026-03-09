@@ -18,14 +18,32 @@ struct clk_root_cfg {
 	uint32_t div;
 };
 
+#ifdef DEBUG
+
+static uint32_t const s_uartClks[] =
+{
+    0,
+    CLOCK_ROOT_LPUART1,
+    CLOCK_ROOT_LPUART2,
+    CLOCK_ROOT_LPUART3,
+    CLOCK_ROOT_LPUART4,
+    CLOCK_ROOT_LPUART5,
+    CLOCK_ROOT_LPUART6,
+    CLOCK_ROOT_LPUART7,
+    CLOCK_ROOT_LPUART8
+};
+
+_Static_assert( BOARD_DEBUG_UART_INSTANCE > 0, "Error: debug uart instance needs > 0");
+_Static_assert( BOARD_DEBUG_UART_INSTANCE < ARRAY_SIZE(s_uartClks), "Error: debug uart instance out of range");
+
+#endif
+
+
+
 static struct clk_root_cfg clk_root_cfgs[] = {
 	{ CLOCK_ROOT_DRAMAPB, CLOCK_SRC_SYSPLL1_PFD1_DIV2, 3 }, /* 400MHz / 3 = 133.(3) MHz */
 #ifdef DEBUG
-#if (BOARD_DEBUG_UART_INSTANCE == 1)
-	{ CLOCK_ROOT_LPUART1, CLOCK_SRC_OSC24M, 1}, /* 24MHz */
-#elif (BOARD_DEBUG_UART_INSTANCE == 2)
-	{ CLOCK_ROOT_LPUART2, CLOCK_SRC_OSC24M, 1}, /* 24MHz */
-#endif
+	{ s_uartClks[BOARD_DEBUG_UART_INSTANCE], CLOCK_SRC_OSC24M, 1}, /* 24MHz */
 #endif
 };
 
