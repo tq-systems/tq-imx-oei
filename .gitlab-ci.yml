@@ -36,4 +36,5 @@ compile:
     paths:
       - "${BUILDDIR}/${MACHINE}/${IMAGE}/*.bin"
       - "${BUILDDIR}/${MACHINE}/${IMAGE}/*.elf"
+      - "${BUILDDIR}/${MACHINE}/${IMAGE}/*.map"
       - "${BUILDDIR}/${MACHINE}/${IMAGE}/build_info.h"
