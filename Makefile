@@ -95,7 +95,7 @@ endif
 TEST ?= 0
 
 # Configure output
-BUILD = $(ROOT_DIR)/build
+BUILD ?= $(ROOT_DIR)/build
 OUT = $(BUILD)/$(SOM)/$(OEI)
 INCLUDE = -I$(OUT)
 
