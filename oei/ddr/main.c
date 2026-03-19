@@ -99,6 +99,8 @@ int oei_main(uint32_t argc, uint32_t *argv)
         id = argv[2];
     }
 
+    Ddr_Pre_Init();
+
     ret = Ddr_Load_Training_Data(offset);
     if (ret != ROM_API_OKAY)
     {
@@ -106,6 +108,8 @@ int oei_main(uint32_t argc, uint32_t *argv)
     }
 
     ret = Ddrc_Init(&dram_timing, id);
+
+    Ddr_Post_Init();
 
 #ifdef DDR_IEE
     if (ret == 0)
